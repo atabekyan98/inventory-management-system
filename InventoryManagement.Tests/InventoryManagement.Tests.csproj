@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+
+		<!-- Essential fixes for integration tests -->
+		<PreserveCompilationContext>true</PreserveCompilationContext>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<GenerateProgramFile>true</GenerateProgramFile>
+		<EnableDynamicLoading>true</EnableDynamicLoading>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Test packages -->
+		<PackageReference Include="coverlet.collector" Version="6.0.0" />
+		<PackageReference Include="FluentAssertions" Version="8.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.14" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.4" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+		<PackageReference Include="Moq" Version="4.20.72" />
+		<PackageReference Include="xunit" Version="2.5.3" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+
+		<!-- Additional packages for JSON handling -->
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.14" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\InventoryManagement.API\InventoryManagement.API.csproj" />
+		<ProjectReference Include="..\InventoryManagement.Core\InventoryManagement.Core.csproj" />
+		<ProjectReference Include="..\InventoryManagement.Infrastructure\InventoryManagement.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Xunit" />
+		<Using Include="Microsoft.AspNetCore.Mvc.Testing" />
+		<Using Include="FluentAssertions" />
+		<Using Include="Moq" />
+	</ItemGroup>
+
+	<!-- Ensure testhost files are copied properly -->
+	<Target Name="CopyDepsFiles" AfterTargets="Build">
+		<Copy SourceFiles="$(OutputPath)\$(AssemblyName).deps.json" DestinationFiles="$(OutputPath)\testhost.deps.json" />
+	</Target>
+
+</Project>
